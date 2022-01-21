@@ -10,7 +10,15 @@ const HTTP_PORT = process.env.PORT || 8080;
 require("dotenv").config();
 const connectionString = process.env.MONGODB_CONN_STRING;
 
-app.listen(HTTP_PORT, () => {
-   console.log(`listening on port ${HTTP_PORT}`);
-   console.log(`mongodb connection string: ${connectionString}`);
-});
+const ProgressTrackerDB = require("./database.js");
+const db = new ProgressTrackerDB();
+
+db.initialize(connectionString)
+   .then(() => {
+      app.listen(HTTP_PORT, () => {
+         console.log(`server listening on port ${HTTP_PORT}`);
+      });
+   })
+   .catch((err) => {
+      console.log(err);
+   });
