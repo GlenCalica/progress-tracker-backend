@@ -1,21 +1,24 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-   name: String,
-   metrics: [
-      {
-         name: String,
-         type: String,
-         entries: [
-            {
-               date: Date,
-               value: Number,
-            },
-         ],
-      },
-   ],
-});
+const userSchema = new Schema(
+   {
+      name: String,
+      metrics: [
+         {
+            name: String,
+            type: String,
+            entries: [
+               {
+                  date: Date,
+                  value: Number,
+               },
+            ],
+         },
+      ],
+   },
+   { versionKey: false }
+);
 
 module.exports = class ProgressTrackerDB {
    constructor() {
@@ -37,5 +40,27 @@ module.exports = class ProgressTrackerDB {
             resolve();
          });
       });
+   }
+
+   //get
+   getUser(id) {
+      return this.User.findOne({ _id: id }).exec();
+   }
+
+   //post
+   async addNewUser(data) {
+      const newUser = new this.User(data);
+      await newUser.save();
+      return newUser;
+   }
+
+   //update
+   updateUser(id, data) {
+      return this.User.updateOne({ _id: id }, { $set: data }).exec();
+   }
+
+   //delete
+   deleteUser(id) {
+      return this.User.deleteOne({ _id: id }).exec();
    }
 };
