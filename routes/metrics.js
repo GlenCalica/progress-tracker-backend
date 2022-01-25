@@ -1,9 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const {} = require("../controllers/metrics");
+const {
+   createMetric,
+   getMetric,
+   updateMetric,
+   deleteMetric,
+} = require("../controllers/metrics");
 
 //post metric
-router.post("/users/:id/metrics", (req, res) => {});
+router.post("/users/:id/metrics", (req, res) => {
+   createMetric(req.params.id, req.query)
+      .then((data) => {
+         console.log(data);
+         res.status(201).send("new metric created");
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(500).send("unable to create new metric");
+      });
+});
 
 //get metric
 router.get("/users/:id/metrics/:metric", (req, res) => {});

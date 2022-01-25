@@ -7,7 +7,6 @@ const userSchema = new Schema(
       metrics: [
          {
             name: String,
-            type: String,
             entries: [
                {
                   date: Date,
