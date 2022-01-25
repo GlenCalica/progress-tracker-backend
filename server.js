@@ -3,7 +3,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const routes = require("./routes/users");
+const usersRouter = require("./routes/users");
+const metricsRouter = require("./routes/metrics");
+const entriesRouter = require("./routes/entries");
 
 const app = express();
 
@@ -21,7 +23,9 @@ mongoose
    .then(() => {
       app.listen(HTTP_PORT, () => {
          console.log(`server listening on port ${HTTP_PORT}`);
-         app.use("/api", routes);
+         app.use("/api", usersRouter);
+         app.use("/api", metricsRouter);
+         app.use("/api", entriesRouter);
       });
    })
    .catch((err) => {
