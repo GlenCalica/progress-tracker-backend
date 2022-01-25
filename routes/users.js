@@ -9,7 +9,7 @@ const {
 
 //post user
 //TODO: tie this to account creation because it shouldn't be accessible to users
-router.post("/user", (req, res) => {
+router.post("/users", (req, res) => {
    createUser(req.body)
       .then((data) => {
          console.log(data);
@@ -22,7 +22,7 @@ router.post("/user", (req, res) => {
 });
 
 //get user
-router.get("/user/:id", (req, res) => {
+router.get("/users/:id", (req, res) => {
    getUser(req.params.id)
       .then((data) => {
          if (data == null) {
@@ -38,7 +38,7 @@ router.get("/user/:id", (req, res) => {
 });
 
 //update user
-router.put("/user/:id", (req, res) => {
+router.put("/users/:id", (req, res) => {
    console.log(req.params.id);
    console.log(req.body);
    updateUser(req.params.id, req.body)
@@ -57,7 +57,7 @@ router.put("/user/:id", (req, res) => {
 });
 
 //delete user
-router.delete("/user/:id", (req, res) => {
+router.delete("/users/:id", (req, res) => {
    deleteUser(req.params.id)
       .then((data) => {
          if (data.deletedCount == 0) {
