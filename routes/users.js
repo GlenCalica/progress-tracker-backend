@@ -1,11 +1,25 @@
 const express = require("express");
 const router = express.Router();
 const {
-   getUser,
    createUser,
+   getUser,
    updateUser,
    deleteUser,
 } = require("../controllers/users");
+
+//post user
+//TODO: tie this to account creation because it shouldn't be accessible to users
+router.post("/user", (req, res) => {
+   createUser(req.body)
+      .then((data) => {
+         console.log(data);
+         res.status(201).send("new user created");
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(500).send("unable to create new user");
+      });
+});
 
 //get user
 router.get("/user/:id", (req, res) => {
@@ -18,19 +32,8 @@ router.get("/user/:id", (req, res) => {
          }
       })
       .catch((err) => {
+         console.log(err);
          res.status(500).send("server error");
-      });
-});
-
-//post user
-router.post("/user", (req, res) => {
-   createUser(req.body)
-      .then((data) => {
-         console.log(data);
-         res.status(201).send("new user created");
-      })
-      .catch((err) => {
-         res.status(500).send("unable to create new user");
       });
 });
 
@@ -64,6 +67,7 @@ router.delete("/user/:id", (req, res) => {
          }
       })
       .catch((err) => {
+         console.log(err);
          res.status(500).send("unable to delete user");
       });
 });
