@@ -9,7 +9,7 @@ const createMetric = (id, metric) => {
 
 //get
 const getMetric = (id, metric) => {
-   return User.findOne({ _id: id, "metrics.name": metric }).exec();
+   return User.findOne({ _id: id }).exec();
 };
 
 //update
