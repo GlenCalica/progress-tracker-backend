@@ -6,6 +6,7 @@ const userSchema = new Schema(
       name: String,
       metrics: [
          {
+            _id: false,
             name: String,
             entries: [
                {
