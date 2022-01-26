@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {
    createMetric,
+   getAllMetrics,
    getMetric,
    updateMetric,
    deleteMetric,
@@ -20,6 +21,23 @@ router.post("/users/:id/metrics", (req, res) => {
       });
 });
 
+//get all metrics
+router.get("/users/:id/metrics", (req, res) => {
+   getAllMetrics(req.params.id)
+      .then((data) => {
+         if (data == null) {
+            console.log(data);
+            res.status(404).send("user not found");
+         } else {
+            res.send(data);
+         }
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(500).send("server error");
+      });
+});
+
 //get metric
 router.get("/users/:id/metrics/:metric", (req, res) => {
    getMetric(req.params.id, req.params.metric)
@@ -28,12 +46,7 @@ router.get("/users/:id/metrics/:metric", (req, res) => {
             console.log(data);
             res.status(404).send("user not found");
          } else {
-            //TODO: this is kind of janky
-            //might be inefficient because mongoose returns all metrics instead of only the queried one
-            //ideal solution would be handling this in the metrics controller
-            res.send(
-               data.metrics.find((metric) => metric.name == req.params.metric)
-            );
+            res.send(data);
          }
       })
       .catch((err) => {

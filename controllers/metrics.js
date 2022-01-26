@@ -7,9 +7,16 @@ const createMetric = (id, metric) => {
    return User.updateOne({ _id: id }, { $push: { metrics: metric } });
 };
 
-//get
-const getMetric = (id, metric) => {
-   return User.findOne({ _id: id }).exec();
+//get all
+const getAllMetrics = async (id) => {
+   let data = await User.findOne({ _id: id }, { _id: 0, metrics: 1 }).exec();
+   return data.metrics;
+};
+
+//get one
+const getMetric = async (id, metric) => {
+   let data = await getAllMetrics(id);
+   return data.find((m) => m.name == metric);
 };
 
 //update
@@ -22,4 +29,10 @@ const deleteMetric = (id, metric) => {
    return null;
 };
 
-module.exports = { createMetric, getMetric, updateMetric, deleteMetric };
+module.exports = {
+   createMetric,
+   getAllMetrics,
+   getMetric,
+   updateMetric,
+   deleteMetric,
+};
