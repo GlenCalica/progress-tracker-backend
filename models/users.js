@@ -11,7 +11,8 @@ const userSchema = new Schema(
             name: { type: String, unique: true, dropDups: true },
             entries: [
                {
-                  date: Date,
+                  _id: false,
+                  date: String,
                   value: Number,
                },
             ],

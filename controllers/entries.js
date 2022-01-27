@@ -2,9 +2,14 @@ const User = require("../models/users");
 
 //post
 const createEntry = async (id, metricName, value) => {
+   let date = new Date(Date.now());
+   let day = date.getDate();
+   let month = date.getMonth() + 1;
+   let year = date.getFullYear();
+
    let entry = {
       value: value,
-      date: Date.now(),
+      date: `${month}-${day}-${year}`,
    };
    console.log(entry);
 
