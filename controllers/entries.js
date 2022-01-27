@@ -16,6 +16,12 @@ const createEntry = async (id, metricName, value) => {
 };
 
 //get all
+const getAllEntries = async (id, metricName) => {
+   let user = await User.findOne({ _id: id }).exec();
+   let index = user.metrics.findIndex((metric) => metric.name == metricName);
+
+   return user.metrics[index].entries;
+};
 
 //get
 
@@ -25,7 +31,7 @@ const createEntry = async (id, metricName, value) => {
 
 module.exports = {
    createEntry,
-   // getAllEntries,
+   getAllEntries,
    // getEntry,
    // updateEntry,
    // deleteEntry,

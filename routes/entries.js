@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {
    createEntry,
-   // getAllEntries,
+   getAllEntries,
    // getEntry,
    // updateEntry,
    // deleteEntry,
@@ -19,6 +19,23 @@ router.post("/users/:id/metrics/:metric/entries", (req, res) => {
       .catch((err) => {
          console.log(err);
          res.status(500).send("unable to create new entry");
+      });
+});
+
+//get all entries
+router.get("/users/:id/metrics/:metric/entries", (req, res) => {
+   getAllEntries(req.params.id, req.params.metric)
+      .then((data) => {
+         if (data == null) {
+            console.log(data);
+            res.status(404).send("entry not found");
+         } else {
+            res.send(data);
+         }
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(500).send("server error");
       });
 });
 
