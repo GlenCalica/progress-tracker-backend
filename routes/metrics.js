@@ -56,7 +56,26 @@ router.get("/users/:id/metrics/:metric", (req, res) => {
 });
 
 //update metric
-router.put("/users/:id/metrics/:metric", (req, res) => {});
+router.put("/users/:id/metrics/:metric", (req, res) => {
+   console.log(req.params.id);
+   console.log(req.body);
+   updateMetric(req.params.id, req.params.metric, req.body)
+      .then((data) => {
+         console.log(data);
+         if (data.matchedCount == 0) {
+            res.status(404).send("metric not found");
+         }
+         if (data.matchedCount == 1 && data.modifiedCount == 0) {
+            res.send("no new data");
+         } else {
+            res.send("metric updated");
+         }
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(500).send("unable to update metric");
+      });
+});
 
 //delete metric
 router.delete("/users/:id/metrics/:metric", (req, res) => {});

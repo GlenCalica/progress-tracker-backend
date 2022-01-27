@@ -1,3 +1,4 @@
+const { is } = require("express/lib/request");
 const User = require("../models/users");
 
 //post
@@ -20,8 +21,19 @@ const getMetric = async (id, metric) => {
 };
 
 //update
-const updateMetric = (id, data) => {
-   return null;
+const updateMetric = async (id, metricName, data) => {
+   let metricsData = await getAllMetrics(id);
+   let index = metricsData.findIndex((m) => (m.name = metricName));
+   metricsData[index] = data;
+
+   return User.updateOne(
+      { _id: id },
+      {
+         $set: {
+            metrics: metricsData,
+         },
+      }
+   );
 };
 
 //delete
