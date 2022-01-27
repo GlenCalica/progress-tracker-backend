@@ -7,7 +7,8 @@ const userSchema = new Schema(
       metrics: [
          {
             _id: false,
-            name: String,
+            //TODO: make it so metric names are unique
+            name: { type: String, unique: true, dropDups: true },
             entries: [
                {
                   date: Date,

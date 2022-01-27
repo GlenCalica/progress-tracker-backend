@@ -1,6 +1,8 @@
 const User = require("../models/users");
 
 //post
+//TODO: make it so metric names are unique
+//might be able to do this in models/users.js
 const createMetric = (id, metric) => {
    metric.entries = [];
    console.log(metric);
