@@ -1,4 +1,3 @@
-const { is } = require("express/lib/request");
 const User = require("../models/users");
 
 //post
@@ -23,7 +22,7 @@ const getMetric = async (id, metric) => {
 //update
 const updateMetric = async (id, metricName, data) => {
    let metricsData = await getAllMetrics(id);
-   let index = metricsData.findIndex((m) => (m.name = metricName));
+   let index = metricsData.findIndex((m) => m.name == metricName);
    metricsData[index] = data;
 
    return User.updateOne(
@@ -37,8 +36,22 @@ const updateMetric = async (id, metricName, data) => {
 };
 
 //delete
-const deleteMetric = (id, metric) => {
-   return null;
+const deleteMetric = async (id, metricName) => {
+   let metricsData = await getAllMetrics(id);
+   let index = metricsData.findIndex((m) => m.name == metricName);
+
+   if (index != -1) {
+      metricsData.splice(index, 1);
+   }
+
+   return User.updateOne(
+      { _id: id },
+      {
+         $set: {
+            metrics: metricsData,
+         },
+      }
+   );
 };
 
 module.exports = {

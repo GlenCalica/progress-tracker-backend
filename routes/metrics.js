@@ -78,6 +78,20 @@ router.put("/users/:id/metrics/:metric", (req, res) => {
 });
 
 //delete metric
-router.delete("/users/:id/metrics/:metric", (req, res) => {});
+router.delete("/users/:id/metrics/:metric", (req, res) => {
+   deleteMetric(req.params.id, req.params.metric)
+      .then((data) => {
+         if (data.modifiedCount == 0) {
+            res.status(404).send("metric not found");
+         } else {
+            console.log(data);
+            res.send("metric deleted");
+         }
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(500).send("unable to delete metric");
+      });
+});
 
 module.exports = router;
