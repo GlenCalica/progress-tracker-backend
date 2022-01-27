@@ -9,7 +9,6 @@ const {
 } = require("../controllers/metrics");
 
 //TODO: clean up all routes
-//change messages that contain users to metrics
 //post metric
 router.post("/users/:id/metrics", (req, res) => {
    createMetric(req.params.id, req.query.name)
@@ -29,7 +28,7 @@ router.get("/users/:id/metrics", (req, res) => {
       .then((data) => {
          if (data == null) {
             console.log(data);
-            res.status(404).send("user not found");
+            res.status(404).send("metric not found");
          } else {
             res.send(data);
          }
@@ -46,7 +45,7 @@ router.get("/users/:id/metrics/:metric", (req, res) => {
       .then((data) => {
          if (data == null) {
             console.log(data);
-            res.status(404).send("user not found");
+            res.status(404).send("metric not found");
          } else {
             res.send(data);
          }
@@ -83,7 +82,6 @@ router.put("/users/:id/metrics/:metric", (req, res) => {
 router.delete("/users/:id/metrics/:metric", (req, res) => {
    deleteMetric(req.params.id, req.params.metric)
       .then((data) => {
-         console.log(data);
          if (data.modifiedCount == 0) {
             res.status(404).send("metric not found");
          } else {
