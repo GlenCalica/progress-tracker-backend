@@ -12,7 +12,7 @@ const {
 //change messages that contain users to metrics
 //post metric
 router.post("/users/:id/metrics", (req, res) => {
-   createMetric(req.params.id, req.query)
+   createMetric(req.params.id, req.query.name)
       .then((data) => {
          console.log(data);
          res.status(201).send("new metric created");
@@ -83,6 +83,7 @@ router.put("/users/:id/metrics/:metric", (req, res) => {
 router.delete("/users/:id/metrics/:metric", (req, res) => {
    deleteMetric(req.params.id, req.params.metric)
       .then((data) => {
+         console.log(data);
          if (data.modifiedCount == 0) {
             res.status(404).send("metric not found");
          } else {
