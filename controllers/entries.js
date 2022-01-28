@@ -13,8 +13,8 @@ const createEntry = async (id, metricName, value) => {
    dateString = dateString.replace(/\//g, "-");
 
    let entry = {
-      value: value,
       date: dateString,
+      value: value,
    };
    console.log(entry);
 
@@ -40,13 +40,57 @@ const getEntry = async (id, metricName, entryDate) => {
 };
 
 //update
+const updateEntry = async (id, metricName, entryDate, data) => {
+   let user = await User.findOne({ _id: id }).exec();
+   let indexMetric = user.metrics.findIndex(
+      (metric) => metric.name == metricName
+   );
+
+   let indexEntry = user.metrics[indexMetric].entries.findIndex(
+      (entry) => entry.date == entryDate
+   );
+   let field = `metrics.${indexMetric}.entries.${indexEntry}`;
+
+   return User.updateOne(
+      { _id: id },
+      {
+         $set: {
+            [field]: {
+               date: entryDate,
+               ...data,
+            },
+         },
+      }
+   );
+};
 
 //delete
+const deleteEntry = async (id, metricName, entryDate) => {
+   let user = await User.findOne({ _id: id }).exec();
+   let indexMetric = user.metrics.findIndex(
+      (metric) => metric.name == metricName
+   );
+
+   // let indexEntry = user.metrics[indexMetric].entries.findIndex(
+   //    (entry) => entry.date == entryDate
+   // );
+   console.log(entryDate);
+   let field = `metrics.${indexMetric}.entries`;
+
+   return User.updateOne(
+      { _id: id },
+      {
+         $pull: {
+            [field]: { date: entryDate },
+         },
+      }
+   );
+};
 
 module.exports = {
    createEntry,
    getAllEntries,
    getEntry,
-   // updateEntry,
-   // deleteEntry,
+   updateEntry,
+   deleteEntry,
 };

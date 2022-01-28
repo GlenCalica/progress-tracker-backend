@@ -4,8 +4,8 @@ const {
    createEntry,
    getAllEntries,
    getEntry,
-   // updateEntry,
-   // deleteEntry,
+   updateEntry,
+   deleteEntry,
 } = require("../controllers/entries");
 
 //post entry
@@ -57,9 +57,43 @@ router.get("/users/:id/metrics/:metric/entries/:entry", (req, res) => {
 });
 
 //update entry
-router.put("/users/:id/metrics/:metric/entries/:entry", (req, res) => {});
+router.put("/users/:id/metrics/:metric/entries/:entry", (req, res) => {
+   console.log(req.params.id);
+   console.log(req.body);
+   updateEntry(req.params.id, req.params.metric, req.params.entry, req.body)
+      .then((data) => {
+         console.log(data);
+         if (data.matchedCount == 0) {
+            res.status(404).send("entry not found");
+         }
+         if (data.matchedCount == 1 && data.modifiedCount == 0) {
+            res.send("no new data");
+         } else {
+            res.send("entry updated");
+         }
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(500).send("unable to update entry");
+      });
+});
 
 //delete entry
-router.delete("/users/:id/metrics/:metric/entries/:entry", (req, res) => {});
+router.delete("/users/:id/metrics/:metric/entries/:entry", (req, res) => {
+   deleteEntry(req.params.id, req.params.metric, req.params.entry)
+      .then((data) => {
+         if (data.modifiedCount == 0) {
+            console.log(data);
+            res.status(404).send("entry not found");
+         } else {
+            console.log(data);
+            res.send("entry deleted");
+         }
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(500).send("unable to delete entry");
+      });
+});
 
 module.exports = router;
