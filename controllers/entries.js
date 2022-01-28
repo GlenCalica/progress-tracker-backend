@@ -3,26 +3,29 @@ const User = require("../models/users");
 //post
 const createEntry = async (id, metricName, value) => {
    let date = new Date(Date.now());
-
-   let dateString = date.toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-   });
-
-   dateString = dateString.replace(/\//g, "-");
-
-   let entry = {
-      date: dateString,
-      value: value,
-   };
-   console.log(entry);
+   let dateString = date
+      .toLocaleDateString("en-US", {
+         month: "2-digit",
+         day: "2-digit",
+         year: "numeric",
+      })
+      .replace(/\//g, "-");
 
    let user = await User.findOne({ _id: id }).exec();
    let index = user.metrics.findIndex((metric) => metric.name == metricName);
    let field = `metrics.${index}.entries`;
 
-   return User.updateOne({ _id: id }, { $push: { [field]: entry } });
+   return User.updateOne(
+      { _id: id },
+      {
+         $push: {
+            [field]: {
+               date: dateString,
+               value: value,
+            },
+         },
+      }
+   );
 };
 
 //get all
@@ -67,15 +70,9 @@ const updateEntry = async (id, metricName, entryDate, data) => {
 //delete
 const deleteEntry = async (id, metricName, entryDate) => {
    let user = await User.findOne({ _id: id }).exec();
-   let indexMetric = user.metrics.findIndex(
-      (metric) => metric.name == metricName
-   );
+   let index = user.metrics.findIndex((metric) => metric.name == metricName);
 
-   // let indexEntry = user.metrics[indexMetric].entries.findIndex(
-   //    (entry) => entry.date == entryDate
-   // );
-   console.log(entryDate);
-   let field = `metrics.${indexMetric}.entries`;
+   let field = `metrics.${index}.entries`;
 
    return User.updateOne(
       { _id: id },

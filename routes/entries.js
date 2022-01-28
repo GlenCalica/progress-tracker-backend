@@ -62,7 +62,7 @@ router.put("/users/:id/metrics/:metric/entries/:entry", (req, res) => {
    console.log(req.body);
    updateEntry(req.params.id, req.params.metric, req.params.entry, req.body)
       .then((data) => {
-         console.log(data);
+         //TODO: handle case if !acknowledged
          if (data.matchedCount == 0) {
             res.status(404).send("entry not found");
          }
