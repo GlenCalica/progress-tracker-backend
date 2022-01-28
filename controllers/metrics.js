@@ -28,13 +28,17 @@ const getMetric = async (id, metricName) => {
 const updateMetric = async (id, metricName, data) => {
    let metrics = await getAllMetrics(id);
    let index = metrics.findIndex((metric) => metric.name == metricName);
-   metrics[index] = data;
+
+   let field = `metrics.${index}`;
 
    return User.updateOne(
       { _id: id },
       {
          $set: {
-            metrics: metrics,
+            [field]: {
+               name: metricName,
+               ...data,
+            },
          },
       }
    );
@@ -42,18 +46,11 @@ const updateMetric = async (id, metricName, data) => {
 
 //delete
 const deleteMetric = async (id, metricName) => {
-   let metrics = await getAllMetrics(id);
-   let index = metrics.findIndex((m) => m.name == metricName);
-
-   if (index != -1) {
-      metrics.splice(index, 1);
-   }
-
    return User.updateOne(
       { _id: id },
       {
-         $set: {
-            metrics: metrics,
+         $pull: {
+            metrics: { name: metricName },
          },
       }
    );
