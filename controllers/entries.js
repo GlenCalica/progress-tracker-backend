@@ -3,13 +3,18 @@ const User = require("../models/users");
 //post
 const createEntry = async (id, metricName, value) => {
    let date = new Date(Date.now());
-   let day = date.getDate();
-   let month = date.getMonth() + 1;
-   let year = date.getFullYear();
+
+   let dateString = date.toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+   });
+
+   dateString = dateString.replace(/\//g, "-");
 
    let entry = {
       value: value,
-      date: `${month}-${day}-${year}`,
+      date: dateString,
    };
    console.log(entry);
 
@@ -29,6 +34,10 @@ const getAllEntries = async (id, metricName) => {
 };
 
 //get
+const getEntry = async (id, metricName, entryDate) => {
+   let entries = await getAllEntries(id, metricName);
+   return entries.find((entry) => entry.date == entryDate);
+};
 
 //update
 
@@ -37,7 +46,7 @@ const getAllEntries = async (id, metricName) => {
 module.exports = {
    createEntry,
    getAllEntries,
-   // getEntry,
+   getEntry,
    // updateEntry,
    // deleteEntry,
 };

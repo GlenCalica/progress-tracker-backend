@@ -3,7 +3,7 @@ const router = express.Router();
 const {
    createEntry,
    getAllEntries,
-   // getEntry,
+   getEntry,
    // updateEntry,
    // deleteEntry,
 } = require("../controllers/entries");
@@ -40,7 +40,21 @@ router.get("/users/:id/metrics/:metric/entries", (req, res) => {
 });
 
 //get entry
-router.get("/users/:id/metrics/:metric/entries/:entry", (req, res) => {});
+router.get("/users/:id/metrics/:metric/entries/:entry", (req, res) => {
+   getEntry(req.params.id, req.params.metric, req.params.entry)
+      .then((data) => {
+         if (data == null) {
+            console.log(data);
+            res.status(404).send("entry not found");
+         } else {
+            res.send(data);
+         }
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(500).send("server error");
+      });
+});
 
 //update entry
 router.put("/users/:id/metrics/:metric/entries/:entry", (req, res) => {});
