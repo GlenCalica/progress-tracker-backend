@@ -10,6 +10,7 @@ const {
 
 //post entry
 //TODO: only allow one entry per date
+//TODO: allow user to put in any date
 router.post("/users/:id/metrics/:metric/entries", (req, res) => {
    createEntry(req.params.id, req.params.metric, req.query.value)
       .then((data) => {

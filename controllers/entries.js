@@ -1,6 +1,9 @@
 const User = require("../models/users");
 
+//TODO: make function to get index of metric
+
 //post
+//TODO: allow user to put in any date
 const createEntry = async (id, metricName, value) => {
    let date = new Date(Date.now());
    let dateString = date

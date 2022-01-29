@@ -4,12 +4,18 @@ const User = require("../models/users");
 //TODO: make it so metric names are unique
 //might be able to do this in models/users.js
 const createMetric = (id, metricName) => {
-   let metric = {
-      name: metricName,
-      entries: [],
-   };
-   console.log(metric);
-   return User.updateOne({ _id: id }, { $push: { metrics: metric } });
+   console.log(metricName);
+   return User.updateOne(
+      { _id: id },
+      {
+         $push: {
+            metrics: {
+               name: metricName,
+               entries: [],
+            },
+         },
+      }
+   );
 };
 
 //get all
