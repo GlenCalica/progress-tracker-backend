@@ -14,9 +14,16 @@ const getUser = (id) => {
 };
 
 //update
-//TODO: don't allow user to update id. maybe use spread operator?
 const updateUser = (id, data) => {
-   return User.updateOne({ _id: id }, { $set: data }).exec();
+   return User.updateOne(
+      { _id: id },
+      {
+         $set: {
+            id: id,
+            ...data,
+         },
+      }
+   ).exec();
 };
 
 //delete
