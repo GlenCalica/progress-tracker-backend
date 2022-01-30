@@ -3,12 +3,12 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
    {
+      //generate _id manually for added security
       name: String,
       metrics: [
          {
             _id: false,
-            //TODO: make it so metric names are unique
-            name: { type: String, unique: true, dropDups: true },
+            name: String,
             entries: [
                {
                   _id: false,

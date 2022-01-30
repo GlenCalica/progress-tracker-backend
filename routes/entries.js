@@ -11,8 +11,7 @@ const {
 //post entry
 router.post("/users/:id/metrics/:metric/entries/:entry", (req, res) => {
    createEntry(req.params.id, req.params.metric, req.params.entry, req.body)
-      .then((data) => {
-         console.log(data);
+      .then(() => {
          res.status(201).send("new entry created");
       })
       .catch((err) => {
@@ -29,12 +28,7 @@ router.post("/users/:id/metrics/:metric/entries/:entry", (req, res) => {
 router.get("/users/:id/metrics/:metric/entries", (req, res) => {
    getAllEntries(req.params.id, req.params.metric)
       .then((data) => {
-         if (data == null) {
-            console.log(data);
-            res.status(404).send("entry not found");
-         } else {
-            res.send(data);
-         }
+         res.send(data);
       })
       .catch((err) => {
          console.log(err);
@@ -47,7 +41,6 @@ router.get("/users/:id/metrics/:metric/entries/:entry", (req, res) => {
    getEntry(req.params.id, req.params.metric, req.params.entry)
       .then((data) => {
          if (data == null) {
-            console.log(data);
             res.status(404).send("entry not found");
          } else {
             res.send(data);
@@ -61,15 +54,11 @@ router.get("/users/:id/metrics/:metric/entries/:entry", (req, res) => {
 
 //update entry
 router.put("/users/:id/metrics/:metric/entries/:entry", (req, res) => {
-   console.log(req.params.id);
-   console.log(req.body);
    updateEntry(req.params.id, req.params.metric, req.params.entry, req.body)
       .then((data) => {
-         //TODO: handle case if !acknowledged
-         if (data.matchedCount == 0) {
+         if (data.matchedCount == 0 || !data.acknowledged) {
             res.status(404).send("entry not found");
-         }
-         if (data.matchedCount == 1 && data.modifiedCount == 0) {
+         } else if (data.matchedCount == 1 && data.modifiedCount == 0) {
             res.send("no new data");
          } else {
             res.send("entry updated");
@@ -86,10 +75,8 @@ router.delete("/users/:id/metrics/:metric/entries/:entry", (req, res) => {
    deleteEntry(req.params.id, req.params.metric, req.params.entry)
       .then((data) => {
          if (data.modifiedCount == 0) {
-            console.log(data);
             res.status(404).send("entry not found");
          } else {
-            console.log(data);
             res.send("entry deleted");
          }
       })

@@ -12,8 +12,7 @@ const {
 router.post("/users", (req, res) => {
    createUser(req.body)
       .then((data) => {
-         console.log(data);
-         res.status(201).send("new user created");
+         res.status(201).send(`new user created: "${data._id}"`);
       })
       .catch((err) => {
          console.log(err);
@@ -39,13 +38,12 @@ router.get("/users/:id", (req, res) => {
 
 //update user
 router.put("/users/:id", (req, res) => {
-   console.log(req.params.id);
-   console.log(req.body);
    updateUser(req.params.id, req.body)
       .then((data) => {
-         console.log(data);
          if (data.matchedCount == 0) {
             res.status(404).send("user not found");
+         } else if (data.matchedCount == 1 && data.modifiedCount == 0) {
+            res.send("no new data");
          } else {
             res.send("user updated");
          }
