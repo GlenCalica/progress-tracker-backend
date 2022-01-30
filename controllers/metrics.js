@@ -1,10 +1,13 @@
 const User = require("../models/users");
 
 //post
-//TODO: make it so metric names are unique
-//might be able to do this in models/users.js
-const createMetric = (id, metricName) => {
-   console.log(metricName);
+const createMetric = async (id, metricName) => {
+   //check if metric already exists
+   let checkMetric = await getMetric(id, metricName);
+   if (checkMetric) {
+      throw "metric already exists";
+   }
+
    return User.updateOne(
       { _id: id },
       {

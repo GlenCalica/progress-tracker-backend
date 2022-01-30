@@ -12,13 +12,16 @@ const {
 //post metric
 router.post("/users/:id/metrics", (req, res) => {
    createMetric(req.params.id, req.query.name)
-      .then((data) => {
-         console.log(data);
+      .then(() => {
          res.status(201).send("new metric created");
       })
       .catch((err) => {
          console.log(err);
-         res.status(500).send("unable to create new metric");
+         if (err == "metric already exists") {
+            res.status(500).send(err);
+         } else {
+            res.status(500).send("unable to create new metric");
+         }
       });
 });
 
@@ -26,12 +29,7 @@ router.post("/users/:id/metrics", (req, res) => {
 router.get("/users/:id/metrics", (req, res) => {
    getAllMetrics(req.params.id)
       .then((data) => {
-         if (data == null) {
-            console.log(data);
-            res.status(404).send("metric not found");
-         } else {
-            res.send(data);
-         }
+         res.send(data);
       })
       .catch((err) => {
          console.log(err);
@@ -44,7 +42,6 @@ router.get("/users/:id/metrics/:metric", (req, res) => {
    getMetric(req.params.id, req.params.metric)
       .then((data) => {
          if (data == null) {
-            console.log(data);
             res.status(404).send("metric not found");
          } else {
             res.send(data);
@@ -58,15 +55,12 @@ router.get("/users/:id/metrics/:metric", (req, res) => {
 
 //update metric
 router.put("/users/:id/metrics/:metric", (req, res) => {
-   console.log(req.params.id);
-   console.log(req.body);
    updateMetric(req.params.id, req.params.metric, req.body)
       .then((data) => {
          console.log(data);
-         if (data.matchedCount == 0) {
+         if (data.matchedCount == 0 || !data.acknowledged) {
             res.status(404).send("metric not found");
-         }
-         if (data.matchedCount == 1 && data.modifiedCount == 0) {
+         } else if (data.matchedCount == 1 && data.modifiedCount == 0) {
             res.send("no new data");
          } else {
             res.send("metric updated");
@@ -85,7 +79,6 @@ router.delete("/users/:id/metrics/:metric", (req, res) => {
          if (data.modifiedCount == 0) {
             res.status(404).send("metric not found");
          } else {
-            console.log(data);
             res.send("metric deleted");
          }
       })
