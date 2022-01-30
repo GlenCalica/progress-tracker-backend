@@ -8,7 +8,6 @@ const {
    deleteMetric,
 } = require("../controllers/metrics");
 
-//TODO: clean up all routes
 //post metric
 router.post("/users/:id/metrics", (req, res) => {
    createMetric(req.params.id, req.query.name)
