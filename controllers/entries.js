@@ -1,11 +1,14 @@
 const User = require("../models/users");
 
-//TODO: make function to get index of metric
-
 //post
-//TODO: allow user to put in any date
-const createEntry = async (id, metricName, value) => {
-   let date = new Date(Date.now());
+const createEntry = async (id, metricName, entryDate, data) => {
+   //check if date is valid
+   let date = new Date(entryDate);
+   if (date == "Invalid Date" || date > Date.now()) {
+      throw "invalid date";
+   }
+
+   //format date into MM-DD-YYYY
    let dateString = date
       .toLocaleDateString("en-US", {
          month: "2-digit",
@@ -14,6 +17,13 @@ const createEntry = async (id, metricName, value) => {
       })
       .replace(/\//g, "-");
 
+   //check if entry already exists at entryDate
+   let checkEntry = await getEntry(id, metricName, entryDate);
+   if (checkEntry) {
+      throw "entry at date already exists";
+   }
+
+   //create new entry
    let user = await User.findOne({ _id: id }).exec();
    let index = user.metrics.findIndex((metric) => metric.name == metricName);
    let field = `metrics.${index}.entries`;
@@ -24,7 +34,7 @@ const createEntry = async (id, metricName, value) => {
          $push: {
             [field]: {
                date: dateString,
-               value: value,
+               ...data,
             },
          },
       }

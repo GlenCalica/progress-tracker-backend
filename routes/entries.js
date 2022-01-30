@@ -9,17 +9,19 @@ const {
 } = require("../controllers/entries");
 
 //post entry
-//TODO: only allow one entry per date
-//TODO: allow user to put in any date
-router.post("/users/:id/metrics/:metric/entries", (req, res) => {
-   createEntry(req.params.id, req.params.metric, req.query.value)
+router.post("/users/:id/metrics/:metric/entries/:entry", (req, res) => {
+   createEntry(req.params.id, req.params.metric, req.params.entry, req.body)
       .then((data) => {
          console.log(data);
          res.status(201).send("new entry created");
       })
       .catch((err) => {
          console.log(err);
-         res.status(500).send("unable to create new entry");
+         if (err == "invalid date" || err == "entry at date already exists") {
+            res.status(500).send(err);
+         } else {
+            res.status(500).send("unable to create new entry");
+         }
       });
 });
 
