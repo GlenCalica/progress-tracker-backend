@@ -12,14 +12,14 @@ const {
 router.post("/users/:id/metrics", (req, res) => {
    createMetric(req.params.id, req.query.name)
       .then(() => {
-         res.status(201).send("new metric created");
+         res.status(201).json({ message: "new metric created" });
       })
       .catch((err) => {
          console.log(err);
          if (err == "metric already exists") {
-            res.status(500).send(err);
+            res.status(500).json({ message: err });
          } else {
-            res.status(500).send("unable to create new metric");
+            res.status(500).json({ message: "unable to create new metric" });
          }
       });
 });
@@ -28,11 +28,11 @@ router.post("/users/:id/metrics", (req, res) => {
 router.get("/users/:id/metrics", (req, res) => {
    getAllMetrics(req.params.id)
       .then((data) => {
-         res.send(data);
+         res.json(data);
       })
       .catch((err) => {
          console.log(err);
-         res.status(500).send("server error");
+         res.status(500).json({ message: "server error" });
       });
 });
 
@@ -41,14 +41,14 @@ router.get("/users/:id/metrics/:metric", (req, res) => {
    getMetric(req.params.id, req.params.metric)
       .then((data) => {
          if (data == null) {
-            res.status(404).send("metric not found");
+            res.status(404).json({ message: "metric not found" });
          } else {
-            res.send(data);
+            res.json(data);
          }
       })
       .catch((err) => {
          console.log(err);
-         res.status(500).send("server error");
+         res.status(500).json({ message: "server error" });
       });
 });
 
@@ -58,16 +58,16 @@ router.put("/users/:id/metrics/:metric", (req, res) => {
       .then((data) => {
          console.log(data);
          if (data.matchedCount == 0 || !data.acknowledged) {
-            res.status(404).send("metric not found");
+            res.status(404).json({ message: "metric not found" });
          } else if (data.matchedCount == 1 && data.modifiedCount == 0) {
-            res.send("no new data");
+            res.json({ message: "no new data" });
          } else {
-            res.send("metric updated");
+            res.json({ message: "metric updated" });
          }
       })
       .catch((err) => {
          console.log(err);
-         res.status(500).send("unable to update metric");
+         res.status(500).json({ message: "unable to update metric" });
       });
 });
 
@@ -76,14 +76,14 @@ router.delete("/users/:id/metrics/:metric", (req, res) => {
    deleteMetric(req.params.id, req.params.metric)
       .then((data) => {
          if (data.modifiedCount == 0) {
-            res.status(404).send("metric not found");
+            res.status(404).json({ message: "metric not found" });
          } else {
-            res.send("metric deleted");
+            res.json({ message: "metric deleted" });
          }
       })
       .catch((err) => {
          console.log(err);
-         res.status(500).send("unable to delete metric");
+         res.status(500).json({ message: "unable to delete metric" });
       });
 });
 
