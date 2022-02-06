@@ -12,7 +12,7 @@ const createUser = (data, fname, lname) => {
 
 //get
 const getUser = (id) => {
-   return User.findOne({ _id: id }).exec();
+   return User.findOne({ _id: id }, { metrics: 0 }).exec();
 };
 
 //update
