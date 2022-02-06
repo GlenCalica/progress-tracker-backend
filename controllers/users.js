@@ -2,10 +2,12 @@ const User = require("../models/users");
 
 //post
 //TODO: this will probably be moved when the post route is changed
-const createUser = async (data) => {
-   const newUser = new User(data);
-   await newUser.save();
-   return newUser;
+const createUser = (data, fname, lname) => {
+   return User.create({
+      firstname: fname,
+      lastname: lname,
+      ...data,
+   });
 };
 
 //get

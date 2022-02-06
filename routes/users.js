@@ -10,9 +10,9 @@ const {
 //post user
 //TODO: tie this to account creation because it shouldn't be accessible to users
 router.post("/users", (req, res) => {
-   createUser(req.body)
+   createUser(req.body, req.query.firstname, req.query.lastname)
       .then((data) => {
-         res.status(201).json({ message: `new user created: ${data._id}` });
+         res.status(201).json(data);
       })
       .catch((err) => {
          console.log(err);
