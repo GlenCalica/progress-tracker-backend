@@ -4,15 +4,39 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema(
    {
       //generate _id manually for added security
-      name: String,
+      firstname: {
+         type: String,
+         required: true,
+      },
+      lastname: {
+         type: String,
+         required: true,
+      },
+      numMetrics: {
+         type: Number,
+         required: true,
+         default: 0,
+      },
+      numMetricsAllowed: {
+         type: Number,
+         required: true,
+         default: 5,
+      },
       metrics: [
          {
             _id: false,
-            name: String,
+            name: {
+               type: String,
+               required: true,
+            },
+            numEntries: Number,
             entries: [
                {
                   _id: false,
-                  date: String,
+                  date: {
+                     type: String,
+                     required: true,
+                  },
                   value: Number,
                },
             ],
