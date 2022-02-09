@@ -21,9 +21,21 @@ const createMetric = async (id, metricName) => {
    );
 };
 
+//TODO: remove entries from metrics
 //get all
 const getAllMetrics = async (id) => {
    let user = await User.findOne({ _id: id }).exec();
+
+   //potential fix for removing entries from metrics
+   // let userMetrics = [];
+   // //copy all properties except for metrics over
+   // for (let i = 0; i < user.metrics.length; i++) {
+   //    userMetrics.push({
+   //       name: user.metrics[i].name,
+   //    });
+   // }
+   // return userMetrics;
+
    return user.metrics;
 };
 
