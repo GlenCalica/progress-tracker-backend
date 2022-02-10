@@ -3,7 +3,7 @@ const User = require("../models/users");
 //post
 const createEntry = async (id, metricName, entryDate, data) => {
    //check if date is valid
-   let date = new Date(entryDate);
+   let date = new Date(entryDate.replace(/-/g, "/"));
    if (date == "Invalid Date" || date > Date.now()) {
       throw "invalid date";
    }
@@ -18,7 +18,7 @@ const createEntry = async (id, metricName, entryDate, data) => {
       .replace(/\//g, "-");
 
    //check if entry already exists at entryDate
-   let checkEntry = await getEntry(id, metricName, entryDate);
+   let checkEntry = await getEntry(id, metricName, dateString);
    if (checkEntry) {
       throw "entry at date already exists";
    }
