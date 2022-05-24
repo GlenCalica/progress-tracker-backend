@@ -1,5 +1,4 @@
 const asyncHandler = require("express-async-handler");
-
 const Entry = require("../models/entryModel");
 
 const createEntry = asyncHandler(async (req, res) => {
