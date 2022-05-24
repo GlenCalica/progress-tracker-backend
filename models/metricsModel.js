@@ -12,4 +12,4 @@ const metricSchema = mongoose.Schema({
    },
 });
 
-modules.exports = mongoose.model("Metric", metricSchema);
+module.exports = mongoose.model("Metric", metricSchema);

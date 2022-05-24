@@ -3,10 +3,6 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const usersRouter = require("./routes/users");
-const metricsRouter = require("./routes/metrics");
-const entriesRouter = require("./routes/entries");
-
 const app = express();
 
 app.use(express.json());
@@ -23,9 +19,9 @@ mongoose
    .then(() => {
       app.listen(HTTP_PORT, () => {
          console.log(`server listening on port ${HTTP_PORT}`);
-         app.use("/api", usersRouter);
-         app.use("/api", metricsRouter);
-         app.use("/api", entriesRouter);
+         // app.use("/api", require("./routes/userRoutes"));
+         // app.use("/api", require("./routes/metricRoutes"));
+         app.use("/api/entries", require("./routes/entryRoutes"));
       });
    })
    .catch((err) => {
