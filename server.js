@@ -19,7 +19,7 @@ mongoose
    .then(() => {
       app.listen(HTTP_PORT, () => {
          console.log(`server listening on port ${HTTP_PORT}`);
-         // app.use("/api/users", require("./routes/userRoutes"));
+         app.use("/api/users", require("./routes/userRoutes"));
          app.use("/api/metrics", require("./routes/metricRoutes"));
          app.use("/api/entries", require("./routes/entryRoutes"));
       });

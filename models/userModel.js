@@ -1,19 +1,15 @@
 const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
-   firstname: {
+   name: {
       type: String,
       required: true,
    },
-   lastname: {
-      type: String,
-      required: true,
-   },
-   numMetricsAllowed: {
-      type: Number,
-      required: true,
-      default: 5,
-   },
+   // numMetricsAllowed: {
+   //    type: Number,
+   //    required: true,
+   //    default: 5,
+   // },
 });
 
 module.exports = mongoose.model("User", userSchema);
