@@ -6,10 +6,11 @@ const {
    updateEntry,
    deleteEntry,
 } = require("../controllers/entryController");
+const { protect } = require("../middleware/authMiddleware");
 
-router.post("/", createEntry);
-router.get("/", getEntries);
-router.put("/:id", updateEntry);
-router.delete("/:id", deleteEntry);
+router.post("/", protect, createEntry);
+router.get("/", protect, getEntries);
+router.put("/:id", protect, updateEntry);
+router.delete("/:id", protect, deleteEntry);
 
 module.exports = router;

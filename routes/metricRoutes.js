@@ -6,10 +6,11 @@ const {
    updateMetric,
    deleteMetric,
 } = require("../controllers/metricController");
+const { protect } = require("../middleware/authMiddleware");
 
-router.post("/", createMetric);
-router.get("/", getMetrics);
-router.put("/:id", updateMetric);
-router.delete("/:id", deleteMetric);
+router.post("/", protect, createMetric);
+router.get("/", protect, getMetrics);
+router.put("/:id", protect, updateMetric);
+router.delete("/:id", protect, deleteMetric);
 
 module.exports = router;
