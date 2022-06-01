@@ -30,6 +30,16 @@ const updateMetric = asyncHandler(async (req, res) => {
       throw new Error("Metric not found");
    }
 
+   const metricExists = await Metric.findOne({
+      name: req.body.name,
+      id: req.params.id,
+   });
+
+   if (metricExists) {
+      res.status(400);
+      throw new Error("Metric already exists");
+   }
+
    const user = await User.findById(req.user.id);
 
    //Check for user
