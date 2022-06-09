@@ -103,7 +103,27 @@ const updateUser = asyncHandler(async (req, res) => {
    res.status(200).json(updatedUser);
 });
 
-const deleteUser = asyncHandler(async (req, res) => {});
+const deleteUser = asyncHandler(async (req, res) => {
+   const { password } = req.body;
+
+   const user = await User.findById(req.user.id);
+
+   //Check for user
+   if (!user) {
+      res.status(401);
+      throw new Error("User not found");
+   }
+
+   //Check for valid password
+   if (!(await bcrypt.compare(password, user.password))) {
+      res.status(400);
+      throw new Error("Invalid credentials");
+   }
+
+   const deletedUser = await User.findByIdAndDelete(req.params.id);
+
+   res.status(200).json(deletedUser);
+});
 
 //Generate JWT
 const generateToken = (id) => {
@@ -115,4 +135,5 @@ module.exports = {
    loginUser,
    getCurrentUser,
    updateUser,
+   deleteUser,
 };
