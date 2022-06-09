@@ -6,11 +6,11 @@ const entrySchema = mongoose.Schema({
       required: true,
       ref: "User",
    },
-   // metric: {
-   //    type: mongoose.Schema.Types.ObjectId,
-   //    required: true,
-   //    ref: "Metric",
-   // },
+   metric: {
+      type: String,
+      required: true,
+      ref: "Metric",
+   },
    date: {
       type: String,
       required: false,

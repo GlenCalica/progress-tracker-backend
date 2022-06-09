@@ -9,6 +9,7 @@ const createEntry = asyncHandler(async (req, res) => {
    }
 
    const entry = await Entry.create({
+      metric: req.body.metric,
       value: req.body.value,
       user: req.user.id,
    });
