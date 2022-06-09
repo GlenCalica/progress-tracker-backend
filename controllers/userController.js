@@ -60,7 +60,7 @@ const loginUser = asyncHandler(async (req, res) => {
    }
 });
 
-const getMe = asyncHandler(async (req, res) => {
+const getCurrentUser = asyncHandler(async (req, res) => {
    const { _id, name, email } = await User.findById(req.user.id);
 
    res.status(200).json({
@@ -70,6 +70,41 @@ const getMe = asyncHandler(async (req, res) => {
    });
 });
 
+//Only updates user password
+const updateUser = asyncHandler(async (req, res) => {
+   const { oldPassword, newPassword } = req.body;
+
+   const user = await User.findById(req.user.id);
+
+   //Check for user
+   if (!user) {
+      res.status(401);
+      throw new Error("User not found");
+   }
+
+   //Check for valid password
+   if (!(await bcrypt.compare(oldPassword, user.password))) {
+      res.status(400);
+      throw new Error("Invalid credentials");
+   }
+
+   //Hash new password
+   const salt = await bcrypt.genSalt(10);
+   const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+   const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { password: hashedPassword },
+      {
+         new: true,
+      }
+   );
+
+   res.status(200).json(updatedUser);
+});
+
+const deleteUser = asyncHandler(async (req, res) => {});
+
 //Generate JWT
 const generateToken = (id) => {
    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
@@ -78,5 +113,6 @@ const generateToken = (id) => {
 module.exports = {
    registerUser,
    loginUser,
-   getMe,
+   getCurrentUser,
+   updateUser,
 };
