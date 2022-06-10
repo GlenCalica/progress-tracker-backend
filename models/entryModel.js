@@ -12,8 +12,8 @@ const entrySchema = mongoose.Schema({
       ref: "Metric",
    },
    date: {
-      type: String,
-      required: false,
+      type: Date,
+      required: true,
    },
    value: {
       type: Number,

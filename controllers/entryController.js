@@ -9,9 +9,10 @@ const createEntry = asyncHandler(async (req, res) => {
    }
 
    const entry = await Entry.create({
+      user: req.user.id,
       metric: req.body.metric,
       value: req.body.value,
-      user: req.user.id,
+      date: req.body.date,
    });
 
    res.status(200).json(entry);
